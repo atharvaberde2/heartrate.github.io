@@ -5,7 +5,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load your ML model (make sure to provide the correct path to your model)
-with open('your_model.pkl', 'rb') as model_file:
+with open('heartrate_classification_model.pkl', 'rb') as model_file:
     model = pickle.load(model_file)
 
 @app.route('/predict', methods=['POST'])
