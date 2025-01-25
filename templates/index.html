@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Prediction App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-green-400 to-blue-500 flex flex-col items-center justify-center min-h-screen p-5">
+    <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
+        <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Heart Rate Prediction</h1>
+        <p class="text-center text-gray-600 mb-4">Predict your heart rate based on your inputs.</p>
+        
+        <form id="prediction-form" class="space-y-4" action = "{{url_for('predict')}}" method = "post">
+            <div>
+                <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                <input type="number" id="age" name="age" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div>
+                <label for="resting bp s" class="block text-sm font-medium text-gray-700">Resting BP s (kg)</label>
+                <input type="number" id="weight" name="weight" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div>
+                <label for="cholesterol" class="block text-sm font-medium text-gray-700">Cholesterol </label>
+                <input type="number" id="weight" name="weight" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div>
+                <label for="oldpeak" class="block text-sm font-medium text-gray-700">Oldpeak </label>
+                <input type="number" id="weight" name="weight" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div>
+                <label for="max heart rate" class="block text-sm font-medium text-gray-700">Max Heart Rate </label>
+                <input type="number" id="weight" name="weight" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+            </div>
+            <div>
+                <label for="Sex" class="block text-sm font-medium text-gray-700">Sex</label>
+                <select id="Sex" name="activity-level" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div>
+                <label for="Chest Pain Type" class="block text-sm font-medium text-gray-700">Chest Pain Type</label>
+                <select id="Chest Pain Type" name="activity-level" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+                    <option value="Typical">Typical</option>
+                    <option value="Typical Angina">Typical Angina</option>
+                    <option value="Non-Anginal Pain">Non-Anginal Pain</option>
+                    <option value="Typical">Asymptotic</option>
+                </select>
+            </div>
+            <div>
+                <label for="Excercise Angina" class="block text-sm font-medium text-gray-700">Excercise Angina</label>
+                <select id="Excercise Angina" name="activity-level" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+                    <option value="Typical">Typical</option>
+                    <option value="Typical Angina">Typical Angina</option>
+                    <option value="Non-Anginal Pain">Non-Anginal Pain</option>
+                    <option value="Typical">Asymptotic</option>
+                </select>
+            </div>
+            <div>
+                <label for="resting-ecg" class="block text-sm font-medium text-gray-700">Resting ECG</label>
+                <select id="resting-ecg" name="fitness-level" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+                    <option value="Normal">Normal</option>
+                    <option value="Abnormality in Heart Rythm">Abnormality</option>
+                    <option value="Myocrdial Abnormality">Myocrdial Abnormality</option>
+                </select>
+            </div>
+            <div>
+                <label for="ST slope" class="block text-sm font-medium text-gray-700">ST slope</label>
+                <select id="ST slope" name="fitness-level" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-500 focus:border-green-500">
+                    <option value="Normal">0</option>
+                    <option value="Abnormality in Heart Rythm">1</option>
+                    <option value="Myocrdial Abnormality">2</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded-md hover:bg-green-700 transition duration-200 ease-in-out focus:outline-none focus:ring focus:ring-green-300">Predict Heart Rate</button>
+        </form>
+
+        <div id="prediction-result" class="mt-6 text-center text-lg font-semibold text-gray-800 hidden"></div>
+        <div id="real-time-data" class="mt-6 text-center text-lg font-semibold text-gray-800 hidden">
+            <p>Live Heart Rate: <span id="live-heart-rate">--</span> bpm</p>
+        </div>
+    </div>
+    <footer class="mt-10 text-center text-gray-600">
+        <p></p>
+    </footer>
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const age = document.getElementById('age').value;
+            const weight = document.getElementById('Sex').value;
+            const chestpaintype = document.getElementById('Chest Pain Type').value;
+            const excerciseangina = document.getElementById('Excercise Angina').value;
+            const restingbps = document.getElementById('resting bp s').value;
+            const cholesterol = document.getElementById('cholesterol').value;
+            const resingecg = document.getElementById('resting-ecg').value;
+            const STslope = document.getElementById('ST slope').value;
+            const oldpeak = document.getElementById('oldpeak').value;
+            const maxheartrate = document.getElementById('max heart rate').value;
+
+
+            // Here you would typically make a call to your ML model to get the prediction
+            prediction
+
+            const resultDiv = document.getElementById('prediction-result');
+            resultDiv.textContent = `${predictedHeartRate}`;
+            resultDiv.classList.remove('hidden');
+
+            // Simulating real-time heart rate data for demonstration
+            setInterval(() => {
+                const liveHeartRate = Math.floor(Math.random() * (100 - 60 + 1)) + 60;
+                document.getElementById('live-heart-rate').textContent = liveHeartRate;
+                document.getElementById('real-time-data').classList.remove('hidden');
+            }, 5000); // Update every 5 seconds
+        });
+    </script>
+</body>
+</html>
