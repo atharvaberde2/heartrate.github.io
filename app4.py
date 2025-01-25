@@ -14,12 +14,12 @@ def predict():
     # Extract features from the request data
     features = [
         data['age'],
-        data['Sex'],
-        data['Chest Pain Type'],
-        data['Excercise Angina'],
+        data['sex'],
+        data['chest pain type'],
+        data['excercise angina'],
         data['resting bp s'],
         data['cholesterol'],
-        data['resting-ecg'],
+        data['resting ecg'],
         data['ST slope'],
         data['oldpeak'],
         data['max heart rate']
