@@ -106,7 +106,36 @@
             const maxheartrate = document.getElementById('max heart rate').value;
 
 
-            
+             const data = {
+        age: age,
+        Sex: weight,
+        'Chest Pain Type': chestpaintype,
+        'Excercise Angina': excerciseangina,
+        'resting bp s': restingbps,
+        cholesterol: cholesterol,
+        'resting-ecg': resingecg,
+        'ST slope': STslope,
+        oldpeak: oldpeak,
+        'max heart rate': maxheartrate
+    };
+
+    // Send data to the server
+    fetch('http://localhost:5000/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.getElementById('result').innerText = `Predicted heart disease risk: ${result.prediction}`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('result').innerText = 'An error occurred while predicting.';
+    });
+});
 
             const resultDiv = document.getElementById('prediction-result');
             resultDiv.textContent = `${predictedHeartRate}`;
