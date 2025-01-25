@@ -1,36 +1,38 @@
-from flask import Flask, render_template, request, jsonify
-import joblib
-import pandas as pd
-import os
+from flask import Flask, request, jsonify
+import pickle
+import numpy as np
 
-app = Flask(__name__, template_folder='template')
+app = Flask(__name__)
 
-# Load the trained model
-model_path = "heartrate_classification_model.pkl"
-if os.path.exists(model_path):
-    model = joblib.load(model_path)
-else:
-    raise FileNotFoundError(f"Model file '{model_path}' not found. Please make sure the model file exists.")
+# Load your ML model (make sure to provide the correct path to your model)
+with open('your_model.pkl', 'rb') as model_file:
+    model = pickle.load(model_file)
 
-@app.route('/')
-def index():
-    return render_template('C:/Users/atber/Downloads/heart rate proj/templates\index.html')
-
-@app.route('/predict', methods=['POST'])    
+@app.route('/predict', methods=['POST'])
 def predict():
-    try:
-        # Get input data from the request
-        data = request.get_json(force=True)
-        
-        # Convert JSON data to a pandas DataFrame
-        input_data = pd.DataFrame(data)
-        
-        # Perform prediction
-        prediction = int(model.predict(input_data)[0])
-                      
-        return jsonify({'prediction': prediction})
-    except Exception as e:
-        return jsonify({'error': str(e)})
+    data = request.json
+    # Extract features from the request data
+    features = [
+        data['age'],
+        data['Sex'],
+        data['Chest Pain Type'],
+        data['Excercise Angina'],
+        data['resting bp s'],
+        data['cholesterol'],
+        data['resting-ecg'],
+        data['ST slope'],
+        data['oldpeak'],
+        data['max heart rate']
+    ]
+    
+    # Convert features to numpy array and reshape for prediction
+    features = np.array(features).reshape(1, -1)
+    
+    # Make prediction
+    prediction = model.predict(features)
+    
+    # Return the prediction (you can customize this response)
+    return jsonify({'prediction': prediction[0]})
 
 if __name__ == '__main__':
     app.run(debug=True)
